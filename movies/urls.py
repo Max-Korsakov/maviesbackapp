@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 
-from backend.views import (
+from movies.views import (
     moovie_list_view,
     create_movie,
     delete_movie,
