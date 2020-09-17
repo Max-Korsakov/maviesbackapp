@@ -26,7 +26,7 @@ SECRET_KEY = 'qs=!1$e^nj@ziq$t(j*1e+3@1mu&hqhmma9y9r2ol^toe1r9q+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '*']
 AUTH_USER_MODEL = 'authentication.User'
 
 # Application definition
