@@ -5,9 +5,18 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .serializers import RegisterSerializer, LoginSerializer
 from .models import User
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 # Create your views here.
 
-
+@swagger_auto_schema(method='post', operation_description='This endpoint does some magic', request_body=openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'username': openapi.Schema(type=openapi.TYPE_STRING, description='string'),
+        'email': openapi.Schema(type=openapi.TYPE_STRING, description='string'),
+        'password': openapi.Schema(type=openapi.TYPE_STRING, description='string'),
+    }
+))
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request, *args, **kwargs):

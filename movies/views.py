@@ -4,11 +4,30 @@ from django.utils.http import is_safe_url
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 from .serializers import MovieSerializer, MovieCreateSerializer
 from .models import MovieModel
 
+test_param = [openapi.Parameter(
+    'sortBy', openapi.IN_QUERY, description="Field to sort by", type=openapi.TYPE_STRING),
+    openapi.Parameter(
+    'sortOrder', openapi.IN_QUERY, description="Value to define sort direction - 'desc' or 'asc'", type=openapi.TYPE_STRING),
+     openapi.Parameter(
+    'search', openapi.IN_QUERY, description="Search value", type=openapi.TYPE_STRING),
+     openapi.Parameter(
+    'searchBy', openapi.IN_QUERY, description="Type of search (title or genres)", type=openapi.TYPE_STRING),
+     openapi.Parameter(
+    'filter', openapi.IN_QUERY, description="Array to filter by genres", type=openapi.TYPE_STRING),
+    openapi.Parameter(
+    'offset', openapi.IN_QUERY, description="Offset in result array for pagination", type=openapi.TYPE_STRING),
+    openapi.Parameter(
+    'limit', openapi.IN_QUERY, description="Limit amount of items in result array for pagination", type=openapi.TYPE_STRING),
+    ]
+user_response = openapi.Response('Movies list', MovieSerializer)
 
+@swagger_auto_schema(method='get', operation_description='Get movies list', manual_parameters=test_param, responses={200: user_response})
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def moovie_list_view(request, *args, **kwargs):
@@ -40,6 +59,7 @@ def moovie_list_view(request, *args, **kwargs):
 @permission_classes([IsAuthenticated])
 def create_movie(request, *args, **kwargs):
     data = request.data or None
+    print(data)
     serializer = MovieCreateSerializer(data=data)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
@@ -60,9 +80,10 @@ def update_movie(request, *args, **kwargs):
     return Response({}, status=400)
 
 
-@api_view(['DELETE'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def delete_movie(request, *args, **kwargs):
+    print('request=>', request.data)
     qs = MovieModel.objects.filter(id=request.data['id'])
     if not qs.exists():
         return Response({"message": "Movie was not found"}, status=404)

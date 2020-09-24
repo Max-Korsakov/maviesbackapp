@@ -6,8 +6,8 @@ from uuid import uuid4
 class MovieModel(models.Model):
     title = models.CharField(max_length=200)
     tagline = models.CharField(max_length=500)
-    vote_average = models.FloatField()
-    vote_count = models.FloatField()
+    vote_average = models.FloatField(default=0)
+    vote_count = models.FloatField(default=0)
     release_date = models.DateField()
     poster_path = models.CharField(max_length=300, null=True)
     overview = models.TextField()

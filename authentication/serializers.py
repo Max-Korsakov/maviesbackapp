@@ -31,8 +31,7 @@ class LoginSerializer(serializers.ModelSerializer):
         min_length=6, max_length=68, write_only=True)
     username = serializers.CharField(
         min_length=6, max_length=68, read_only=True)
-    tokens = serializers.CharField(
-        min_length=6, max_length=68, read_only=True)
+    tokens = serializers.DictField(read_only=True)
 
     class Meta:
         model = User
@@ -46,7 +45,7 @@ class LoginSerializer(serializers.ModelSerializer):
             raise AuthenticationFailed(
                 'Invalid credentials')
         return {
-            'email': user.email,
-            'username': user.username,
-            'tokens': user.tokens()
+            "email": user.email,
+            "username": user.username,
+            "tokens": user.tokens()
         }

@@ -1,8 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,PermissionsMixin)
+from django.contrib.auth.models import (
+    AbstractBaseUser, BaseUserManager, PermissionsMixin)
 from django.db import models
 from rest_framework_simplejwt.tokens import RefreshToken
 # Create your models here.
+
 
 class UserManager(BaseUserManager):
     def create_user(self, username, email, password=None):
@@ -19,11 +21,12 @@ class UserManager(BaseUserManager):
     def create_superuser(self, username, email, password=None):
         if password is None:
             raise TypeError('Password is required')
-        user = self.create_superuser(username,email,password)
+        user = self.create_superuser(username, email, password)
         user.is_superuser = True
         user.is_staff = True
         user.save()
         return user
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, db_index=True)
@@ -37,9 +40,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def tokens(self):
-        refresh=RefreshToken.for_user(self)
+        refresh = RefreshToken.for_user(self)
         return {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token)
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
         }
-
