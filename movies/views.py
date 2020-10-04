@@ -54,12 +54,19 @@ def moovie_list_view(request, *args, **kwargs):
     content = {'movie_count': qs.count(), 'data': serializer.data}
     return Response(content)
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_movie_by_id(request,id, *args, **kwargs):
+    qs=MovieModel.objects.get(id=id)
+    serializer = MovieSerializer(qs)
+    content = {'data': serializer.data}
+    return Response(content)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_movie(request, *args, **kwargs):
     data = request.data or None
-    print(data)
     serializer = MovieCreateSerializer(data=data)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
